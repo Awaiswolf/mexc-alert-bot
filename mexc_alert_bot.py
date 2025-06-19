@@ -65,8 +65,11 @@ def check_prices():
     
     for coin in coins:
         symbol = coin['symbol']
-        volume = float(coin['quoteVolume'])
-        price = float(coin['lastPrice'])
+        try:
+            volume = float(coin['quoteVolume'])
+            price = float(coin['lastPrice'])
+        except:
+            continue  # تخطي العملة إذا كان هناك خطأ في التحويل
         
         # توسيع نطاق حجم التداول (30,000 - 700,000 دولار)
         if 30000 <= volume <= 700000:
@@ -75,10 +78,13 @@ def check_prices():
                 print(f"بدأ تتبع: {symbol} | السعر: {price} | الحجم: ${volume:,.0f}")
         
         # التحقق من التغيرات
-        elif symbol in tracked_coins:
+        if symbol in tracked_coins:  # تم تصحيح الشرط هنا
             base_price = tracked_coins[symbol]
-            change = ((price - base_price) / base_price) * 100
-            
+            try:
+                change = ((price - base_price) / base_price) * 100
+            except ZeroDivisionError:
+                change = 0
+                
             if change >= 5 or change <= -20:
                 send_alert(symbol, change, price, volume)
                 del tracked_coins[symbol]  # توقف عن التتبع
