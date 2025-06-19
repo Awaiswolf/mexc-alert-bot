@@ -84,9 +84,12 @@ def check_price_and_volume():
     
     for coin in coins:
         symbol = coin['symbol']
-        volume_24h = float(coin['quoteVolume'])
-        current_price = float(coin['lastPrice'])
-        
+        try:
+            volume_24h = float(coin['quoteVolume'])
+            current_price = float(coin['lastPrice'])
+        except:
+            continue
+            
         # تصفية العملات حسب حجم التداول اليومي
         if VOLUME_MIN <= volume_24h <= VOLUME_MAX:
             # الحصول على بيانات الـ 5 دقائق الأخيرة
