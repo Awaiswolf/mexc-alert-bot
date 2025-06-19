@@ -49,6 +49,7 @@ def send_alert(symbol, change, price, volume):
     
     if bot:
         try:
+            # تم تصحيح المشكلة: استخدام bot.send_message بشكل صحيح
             bot.send_message(chat_id=CHAT_ID, text=message)
             print(f"تم إرسال تنبيه: {symbol}")
         except TelegramError as e:
