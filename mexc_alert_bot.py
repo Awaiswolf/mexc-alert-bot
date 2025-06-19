@@ -39,5 +39,7 @@ def send_alert(symbol, change, price, volume):
     emoji = "🚀" if change > 0 else "🔻"
     direction = "صعود" if change > 0 else "هبوط"
     
+    # تم تصحيح الأخطاء في صياغة f-string هنا
     message = (
-        f"{emoji} {
+        f"{emoji} {symbol}\n"
+        f"{direction} بنسبة: {abs(change
