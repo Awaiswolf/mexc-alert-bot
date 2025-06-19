@@ -11,10 +11,10 @@ BASE_URL = "https://api.mexc.com/api/v3"
 
 # معايير التتبع
 VOLUME_MIN = 50000
-VOLUME_MAX = 700000
+VOLUME_MAX = 550000
 PRICE_CHANGE_UP = 5
-PRICE_CHANGE_DOWN = 20
-VOLUME_CHANGE = 2000
+PRICE_CHANGE_DOWN = 30
+VOLUME_CHANGE = 20000
 
 # تخزين البيانات
 coin_history = {}
@@ -89,14 +89,14 @@ def monitor():
             
             # إشعار تغير السعر
             if price_change >= PRICE_CHANGE_UP:
-                message = f"🚀 صعود {price_change:.2f}% في 5 دقائق\n"
+                message = f"🚀🚀🚀🚀🚀🌚 صعود {price_change:.2f}% في 5 دقائق\n"
                 message += f"العملة: {symbol}\n"
                 message += f"السعر: {price}\n"
                 message += f"الحجم: ${volume:,.0f}"
                 send_telegram(message)
                 
             elif price_change <= -PRICE_CHANGE_DOWN:
-                message = f"🔻 هبوط {abs(price_change):.2f}% في 5 دقائق\n"
+                message = f"🔻🔻🔻🩸🩸 هبوط {abs(price_change):.2f}% في 5 دقائق\n"
                 message += f"العملة: {symbol}\n"
                 message += f"السعر: {price}\n"
                 message += f"الحجم: ${volume:,.0f}"
@@ -104,7 +104,7 @@ def monitor():
                 
             # إشعار تغير الحجم
             if volume_change >= VOLUME_CHANGE:
-                message = f"📈 زيادة حجم +${volume_change:,.0f}\n"
+                message = f"📈📈📈📈📊 زيادة حجم +${volume_change:,.0f}\n"
                 message += f"العملة: {symbol}\n"
                 message += f"الحجم الجديد: ${volume:,.0f}\n"
                 message += f"السعر: {price}"
