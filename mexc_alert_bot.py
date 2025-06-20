@@ -2,8 +2,9 @@ import os
 import time
 import requests
 import schedule
+import logging
 from datetime import datetime
-from flask import Flask  # إضافة Flask
+from flask import Flask
 import threading
 
 # إعداد خادم ويب بسيط
@@ -15,6 +16,10 @@ def home():
 
 def run_web_server():
     """تشغيل خادم ويب بسيط"""
+    # إيقاف تسجيل الدخول المزعج
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
+    
     port = int(os.getenv('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
 
@@ -124,7 +129,7 @@ def monitor():
             # إشعار تغير السعر
             if price_change >= PRICE_CHANGE_UP:
                 formatted_price = format_price(price_str)
-                message = "🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀\n"
+                message = "🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀\n"
                 message += "<b>صعود</b> {:.2f}% في 5 دقائق\n".format(price_change)
                 message += "----------------------------------------------------\n"
                 message += f"العملة: <b>{symbol}</b>\n"
@@ -136,7 +141,7 @@ def monitor():
                 
             elif price_change <= -PRICE_CHANGE_DOWN:
                 formatted_price = format_price(price_str)
-                message = "🔻🔻🔻🔻🔻🔻🩸🩸🩸🩸🩸🩸\n"
+                message = "🔻🔻🔻🔻🔻🔻🔻🔻🔻🩸🩸🩸🩸🩸🩸🩸🩸🩸\n"
                 message += "<b>هبوط</b> {:.2f}% في 5 دقائق\n".format(abs(price_change))
                 message += "----------------------------------------------------\n"
                 message += f"العملة: <b>{symbol}</b>\n"
@@ -149,7 +154,7 @@ def monitor():
             # إشعار تغير الحجم
             if volume_change >= VOLUME_CHANGE:
                 formatted_price = format_price(price_str)
-                message = "📈📈📈📈📈📈📈📈📈📈📈📈\n"
+                message = "📈📈📈📈📈📈📈📈📈📈📈📈📈📈📈📈📈📈\n"
                 message += "<b>زيادة</b> حجم +${:,.0f}\n".format(volume_change)
                 message += "----------------------------------------------------\n"
                 message += f"العملة: <b>{symbol}</b>\n"
