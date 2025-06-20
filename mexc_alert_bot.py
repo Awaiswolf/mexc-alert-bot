@@ -3,6 +3,20 @@ import time
 import requests
 import schedule
 from datetime import datetime
+from flask import Flask  # إضافة Flask
+import threading
+
+# إعداد خادم ويب بسيط
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "MEXC Alert Bot is running"
+
+def run_web_server():
+    """تشغيل خادم ويب بسيط"""
+    port = int(os.getenv('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
 
 # إعدادات البوت
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
@@ -110,7 +124,7 @@ def monitor():
             # إشعار تغير السعر
             if price_change >= PRICE_CHANGE_UP:
                 formatted_price = format_price(price_str)
-                message = "🚀🚀🚀🚀🚀🌚🌚🚀🚀🚀🚀🚀\n"
+                message = "🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀\n"
                 message += "<b>صعود</b> {:.2f}% في 5 دقائق\n".format(price_change)
                 message += "----------------------------------------------------\n"
                 message += f"العملة: <b>{symbol}</b>\n"
@@ -118,7 +132,6 @@ def monitor():
                 message += f"السعر: {formatted_price}\n"
                 message += "----------------------------------------------------\n"
                 message += f"الحجم: ${volume:,.0f}"
-                message = "بيع ولا تخلي اسمك يضيع 😎\n"
                 send_telegram(message)
                 
             elif price_change <= -PRICE_CHANGE_DOWN:
@@ -131,7 +144,6 @@ def monitor():
                 message += f"السعر: {formatted_price}\n"
                 message += "----------------------------------------------------\n"
                 message += f"الحجم: ${volume:,.0f}"
-                message = "بيع ولا تخلي اسمك يضيع 😎\n"
                 send_telegram(message)
                 
             # إشعار تغير الحجم
@@ -145,7 +157,6 @@ def monitor():
                 message += f"الحجم الجديد: ${volume:,.0f}\n"
                 message += "----------------------------------------------------\n"
                 message += f"السعر: {formatted_price}"
-                message = "بيع ولا تخلي اسمك يضيع 😎\n"
                 send_telegram(message)
             
             # تحديث البيانات
@@ -157,11 +168,15 @@ def monitor():
 
 def job():
     """المهمة المجدولة"""
-    print(f"\n{datetime.now().strftime('%H:%M:%S')} - بدء الفحص")
+    print(f"\n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - بدء الفحص")
     monitor()
 
 if __name__ == "__main__":
-    print("بدأ تشغيل بوت مراقبة MEXC...")
+    # بدء خادم الويب في خيط منفصل
+    web_thread = threading.Thread(target=run_web_server, daemon=True)
+    web_thread.start()
+    
+    print("بدأ تشغيل بوت مراقبة MEXC مع خادم ويب...")
     print(f"حجم التداول: ${VOLUME_MIN:,.0f}-${VOLUME_MAX:,.0f}")
     print(f"تغير السعر: +{PRICE_CHANGE_UP}% / -{PRICE_CHANGE_DOWN}%")
     print(f"تغير الحجم: +${VOLUME_CHANGE:,.0f}")
