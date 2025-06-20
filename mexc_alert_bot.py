@@ -92,6 +92,12 @@ def check_coins():
 
 def monitor():
     """المراقبة الرئيسية"""
+    # إعادة تعيين الذاكرة كل ساعة
+    global coin_history
+    if datetime.now().minute == 0:
+        coin_history = {}
+        print("تم إعادة تعيين ذاكرة التتبع")
+    
     coins = check_coins()
     if not coins:
         print("لم يتم الحصول على بيانات العملات")
